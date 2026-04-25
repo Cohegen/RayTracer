@@ -1,4 +1,4 @@
-# RayTracing
+# RayTracer
 
 A small C++20 ray tracing starter project built with CMake.
 
