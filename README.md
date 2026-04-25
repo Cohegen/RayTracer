@@ -47,10 +47,5 @@ For multi-config generators such as Visual Studio, the executable may be placed 
 - the program entry point is `src/main.cpp`
 - rendered images are written to `output/`
 
-## Suggested Next Steps
-
-1. Add a `ray` class.
-2. Add a camera that emits rays through the viewport.
-3. Add sphere intersection logic.
-4. Render a sky gradient through ray tracing instead of direct pixel coloring.
-5. Add materials and multiple objects.
+## Notice
+- Project implementation is still ongoing, so it's incomplete
