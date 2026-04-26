@@ -93,4 +93,84 @@ auto viewport_width = viewport_height * (double(image_width)/image_height);
 
 ## Definitions
 1. Q (viewport upper-left corner) - starting point of the viewport in 3D space.
-2. $\P_{0,0}$
+2. P_0,0(first pixel center) - slightly offset from Q (by half a pixel in both directions).
+3. delta_u - step from one pixel to the next horizontally.
+4. delta_v - step from one pixel to the next vertically.
+
+#2 Adding a Sphere
+- Spheres are often used in ray tracers because calculating whether a ray hits a sphere is relatively simple.
+
+## 2.1 Ray-Sphere Intersection
+- The equation of a sphere of radius **r** is given is:
+```
+x**2 + y**2  + z**2 = r**2
+```
+-If we want to allows the sphere center to be at a randomly choosen point (Cx,Cy,Cz),then the equation will look like this:
+```
+(Cx-x)**2 + (Cy-y)**2 + (Cz-z)**2 = r**2
+```
+- In graphics, we want the formula to be in terms of vectors, which are represented using **vec3** class.
+- So we notice than the vector from point **P** = **(x,y,z)** to Center **C** = **(Cx,Cy,Cz)** is **(C-P)**.
+- If we use the definition of the dot product:
+```
+(C-P)*(C-P) = (Cx-x)**2 + (Cy-y)**2 + (Cz-z)**2
+```
+- Then we can write the equation of the sphere in vector form as:
+```
+(C-P)*(C-P) = r**2
+```
+
+- So for any point **P** that satisfies this equation on  the sphere.
+- We are required to know if our ray **P(t) = Q + td** ever hits the sphere anywhere.
+- If it does hit the sphere, there is some **t** for which **P(t)** satisfies the sphere equation.
+- So we are now looking for any **t** where it is true:
+```
+(C-P(t))*(C-P(t)) = r**2
+```
+which can be found by replacing **P(t)** with its expanded form:
+```
+(C-(Q+td))*(C-(Q+td)) = r**2
+
+```
+- Since we want to solve for **t**, we seperate the terms based on whether there is a **t** or not:
+```
+(-td+(C-Q))*(-td+(C-Q)) = r**2
+```
+- We can follow the rules of vector algebra to distribute the dot product:
+```
+(t**2)*d*d - 2td * (C-Q) + (C-Q) * (C-Q) = r**2
+```
+- After multiplication all our vector will be reduced to scalars by dot product.
+- So we use the quadratic formula to find **t**.
+- So for solving **t**, the ray-sphere intersection equation gives us these values for **a**, **b** and **c**:
+```
+a = d*d
+b = -2d*(C-Q)
+c = (C-Q)*(C-Q) - r**2
+```
+- So if we get no  real roots (negative roots) it means the ray doesn't intersect with sphere.
+- And we we get a root that equal to zero it mean the ray only hits the sphere and doesn't exit.
+- If the root is greater than zero it means that the ray hits the sphere and exits.
+
+#3 Surface Normals and Multiple Objects
+
+
+## 3.1 Shading with Surface Normals
+- A surface normal vector  is a vector that is perpendicular to the surface at the point of the intersection.
+
+- There three important observations made here:
+    1. If a unit-length normal vector is required, then we might do it up front once, instead of repeating in over and over again. i.e normalizing it once instead of normalizing it everywhere.
+    2. We do require unit-length normal vectors in several places.
+    3. If we require normal vectors to be unit length. We do this by say given sphere normals, these normals can be made unit length by simply dividing by sphere radius avoiding the square root entirely.
+
+- For a sphere:
+- Normal is :
+```
+N = P - C
+```
+- But P is on the sphere.
+- So |P-C| = r
+- So the unit normal vector becomes:
+```
+N^ = (P - C) /r
+```
