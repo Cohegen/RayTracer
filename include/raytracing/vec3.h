@@ -94,6 +94,8 @@ inline vec3 unit_vector(const vec3& v) {
     return len == 0.0 ? vec3() : v / len;
 }
 
+using point3 = vec3;
+
 } // namespace rt
 
 #endif
