@@ -97,7 +97,7 @@ auto viewport_width = viewport_height * (double(image_width)/image_height);
 3. delta_u - step from one pixel to the next horizontally.
 4. delta_v - step from one pixel to the next vertically.
 
-#2 Adding a Sphere
+# 2 Adding a Sphere
 - Spheres are often used in ray tracers because calculating whether a ray hits a sphere is relatively simple.
 
 ## 2.1 Ray-Sphere Intersection
@@ -152,7 +152,7 @@ c = (C-Q)*(C-Q) - r**2
 - And we we get a root that equal to zero it mean the ray only hits the sphere and doesn't exit.
 - If the root is greater than zero it means that the ray hits the sphere and exits.
 
-#3 Surface Normals and Multiple Objects
+# 3 Surface Normals and Multiple Objects
 
 
 ## 3.1 Shading with Surface Normals
