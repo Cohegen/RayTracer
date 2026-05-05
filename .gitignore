@@ -1,6 +1,7 @@
 # Build directories
 /build/
 /build-win/
+/build-wsl/
 /cmake-build-*/
 
 # Compiled binaries
