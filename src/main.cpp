@@ -1,10 +1,10 @@
-#include "color.h"
-#include "constant.h"
-#include "hittable.h"
-#include "hittable_list.h"
-#include "ray.h"
-#include "sphere.h"
-#include "vec3.h"
+#include "raytracing/color.h"
+#include "raytracing/constant.h"
+#include "raytracing/hittable.h"
+#include "raytracing/hittable_list.h"
+#include "raytracing/ray.h"
+#include "raytracing/sphere.h"
+#include "raytracing/vec3.h"
 
 #include <iostream>
 #include <limits>
@@ -17,7 +17,7 @@ using rt::write_color;
 
 color ray_color(const ray& r, const hittable& world) {
     hit_record rec;
-    if (world.hit(r, 0.001, std::numeric_limits<double>::infinity(), rec)) {
+    if (world.hit(r, interval(0, infinity), rec)) {
         return 0.5 * (rec.normal + color(1,1,1));
     }
 

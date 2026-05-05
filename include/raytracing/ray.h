@@ -15,7 +15,7 @@ When position t is plugged in we get only the parts in front of A,
 #ifndef RAY_H 
 #define RAY_H 
 
-#include "vec3.h"
+#include "raytracing/vec3.h"
 
 using rt::point3;
 using rt::vec3;

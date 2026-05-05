@@ -8,7 +8,8 @@ t_min to t_max, so the hit only "counts" if t_min < t < t_max.
 #ifndef HITTABLE_H
 #define HITTABLE_H
 
-#include "ray.h"
+#include "raytracing/interval.h"
+#include "raytracing/ray.h"
 
 using rt::dot;
 
@@ -34,7 +35,7 @@ class hittable
     public:
     virtual ~hittable() = default;
 
-    virtual bool hit(const ray& r, double ray_tmin,double ray_tmax, hit_record& rec) const = 0;
+   virtual bool hit(const ray&r,interval ray_t, hit_record& rec) const=0;
 };
 
 
