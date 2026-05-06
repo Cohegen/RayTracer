@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <limits>
+#include <random>
 
 using rt::color;
 using rt::point3;
@@ -15,10 +16,42 @@ using rt::unit_vector;
 using rt::vec3;
 using rt::write_color;
 
-color ray_color(const ray& r, const hittable& world) {
+double random_double() {
+    static std::uniform_real_distribution<double> distribution(0.0, 1.0);
+    static std::mt19937 generator;
+    return distribution(generator);
+}
+
+vec3 random_vec3(double min, double max) {
+    return vec3(
+        min + (max - min) * random_double(),
+        min + (max - min) * random_double(),
+        min + (max - min) * random_double()
+    );
+}
+
+vec3 random_in_unit_sphere() {
+    while (true) {
+        auto p = random_vec3(-1.0, 1.0);
+        if (p.length_squared() < 1.0) {
+            return p;
+        }
+    }
+}
+
+vec3 random_unit_vector() {
+    return unit_vector(random_in_unit_sphere());
+}
+
+color ray_color(const ray& r, int depth, const hittable& world) {
+    if (depth <= 0) {
+        return color(0, 0, 0);
+    }
+
     hit_record rec;
-    if (world.hit(r, interval(0, infinity), rec)) {
-        return 0.5 * (rec.normal + color(1,1,1));
+    if (world.hit(r, interval(0.001, infinity), rec)) {
+        vec3 direction = rec.normal + random_unit_vector();
+        return 0.5 * ray_color(ray(rec.p, direction), depth - 1, world);
     }
 
     vec3 unit_direction = unit_vector(r.direction());
@@ -32,6 +65,8 @@ int main() {
 
     auto aspect_ratio = 16.0 / 9.0;
     int image_width = 400;
+    int samples_per_pixel = 50;
+    int max_depth = 10;
 
     // Calculate the image height, and ensure that it's at least 1.
     int image_height = int(image_width / aspect_ratio);
@@ -71,12 +106,19 @@ int main() {
     for (int j = 0; j < image_height; j++) {
         std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
         for (int i = 0; i < image_width; i++) {
-            auto pixel_center = pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v);
-            auto ray_direction = pixel_center - camera_center;
-            ray r(camera_center, ray_direction);
+            color pixel_color(0, 0, 0);
 
-            color pixel_color = ray_color(r, world);
-            write_color(std::cout, pixel_color);
+            for (int sample = 0; sample < samples_per_pixel; sample++) {
+                auto pixel_sample = pixel00_loc
+                                  + ((i + random_double()) * pixel_delta_u)
+                                  + ((j + random_double()) * pixel_delta_v);
+                auto ray_direction = pixel_sample - camera_center;
+                ray r(camera_center, ray_direction);
+
+                pixel_color += ray_color(r, max_depth, world);
+            }
+
+            write_color(std::cout, pixel_color, samples_per_pixel);
         }
     }
 
